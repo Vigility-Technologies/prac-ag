@@ -373,7 +373,10 @@ router.get("/available", authenticate, async (req: Request, res: Response) => {
   try {
     const { category } = req.query;
 
-    let query = supabase.from("bids").select("*").neq("status", "rejected");
+    let query = supabase
+      .from("bids")
+      .select("*, assigned_to, assigned_user_name, due_date")
+      .neq("status", "rejected");
 
     // Filter by category if provided
     if (category && typeof category === "string") {
@@ -423,11 +426,10 @@ router.get("/my-bids", authenticate, async (req: Request, res: Response) => {
   }
 });
 
-// Assign bid to member (admin only)
+// Assign bid to member (admin can assign to anyone, members can only self-assign)
 router.post(
   "/:bidId/assign",
   authenticate,
-  isAdmin,
   [
     body("assignedTo").notEmpty(),
     body("assignedUserName").notEmpty(),
@@ -442,16 +444,58 @@ router.post(
     try {
       const { bidId } = req.params;
       const { assignedTo, assignedUserName, dueDate } = req.body;
+      const authReq = req as unknown as AuthRequest;
+
+      // Members can only self-assign, admins can assign to anyone
+      if (authReq.user!.role !== "admin" && assignedTo !== authReq.user!.id) {
+        return res
+          .status(403)
+          .json({ error: "You can only assign bids to yourself" });
+      }
+
+      // Check if bid exists
+      const { data: existingBid } = await supabase
+        .from("bids")
+        .select("status, assigned_to")
+        .eq("id", bidId)
+        .single();
+
+      if (!existingBid) {
+        return res.status(404).json({ error: "Bid not found" });
+      }
+
+      // Members can only assign available and unassigned bids
+      if (authReq.user!.role !== "admin") {
+        if (existingBid.status !== "available") {
+          return res
+            .status(400)
+            .json({ error: "Bid is not available for assignment" });
+        }
+        if (existingBid.assigned_to) {
+          return res.status(400).json({ error: "Bid is already assigned" });
+        }
+      }
+
+      // Admins can reassign any bid or just update the due date
+      const updateData: any = {
+        assigned_to: assignedTo,
+        assigned_user_name: assignedUserName,
+        updated_at: new Date().toISOString(),
+      };
+
+      // Update due date if provided
+      if (dueDate) {
+        updateData.due_date = dueDate;
+      }
+
+      // Set status to "considered" only if currently "available"
+      if (existingBid.status === "available") {
+        updateData.status = "considered";
+      }
 
       const { data: bid, error } = await supabase
         .from("bids")
-        .update({
-          status: "considered",
-          assigned_to: assignedTo,
-          assigned_user_name: assignedUserName,
-          due_date: dueDate,
-          updated_at: new Date().toISOString(),
-        })
+        .update(updateData)
         .eq("id", bidId)
         .select()
         .single();

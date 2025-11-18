@@ -17,6 +17,8 @@ interface Bid {
   end_date: string | null;
   department: string | null;
   status: string;
+  assigned_to?: string;
+  assigned_user_name?: string;
   due_date?: string;
   submitted_doc_link?: string;
   created_at: string;
@@ -28,9 +30,11 @@ export default function MemberDashboard() {
   const { user, loading: authLoading, logout } = useAuth();
   const [bids, setBids] = useState<Bid[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
+  const [members, setMembers] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [memberFilter, setMemberFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"cards" | "table">("table");
   const [selectedBid, setSelectedBid] = useState<Bid | null>(null);
@@ -47,14 +51,25 @@ export default function MemberDashboard() {
 
   const loadBids = async () => {
     try {
-      const response = await bidsAPI.getMyBids();
+      // Fetch all available bids, not just assigned ones
+      const response = await bidsAPI.getAvailableBids();
       setBids(response.data.bids);
-      
+
       // Extract unique categories
       const uniqueCategories = Array.from(
         new Set(response.data.bids.map((bid: Bid) => bid.category_name))
       ).sort();
       setCategories(uniqueCategories as string[]);
+
+      // Extract unique member names
+      const uniqueMembers = Array.from(
+        new Set(
+          response.data.bids
+            .filter((bid: Bid) => bid.assigned_user_name)
+            .map((bid: Bid) => bid.assigned_user_name)
+        )
+      ).sort();
+      setMembers(uniqueMembers as string[]);
     } catch (error) {
       console.error("Failed to load bids:", error);
     } finally {
@@ -62,18 +77,39 @@ export default function MemberDashboard() {
     }
   };
 
-  const handleUpdateStatus = async (
-    bidId: string,
-    status: string,
-    submittedDocLink?: string
-  ) => {
+  const handleSelfAssign = async (bidId: string) => {
+    if (!user) return;
+
+    const dueDateInput = prompt("Enter due date (YYYY-MM-DD):");
+    if (!dueDateInput) return; // User cancelled
+
+    // Validate date format
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!dateRegex.test(dueDateInput)) {
+      alert("Invalid date format. Please use YYYY-MM-DD format.");
+      return;
+    }
+
+    // Validate date is not in the past
+    const selectedDate = new Date(dueDateInput);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+      alert("Due date cannot be in the past.");
+      return;
+    }
+
     try {
-      await bidsAPI.updateBidStatus(bidId, { status, submittedDocLink });
-      alert("Status updated successfully!");
-      setSelectedBid(null);
+      await bidsAPI.assignBid(bidId, {
+        assignedTo: user.id,
+        assignedUserName: user.full_name,
+        dueDate: dueDateInput,
+      });
+      alert("Bid assigned to you successfully!");
       loadBids();
     } catch (error: any) {
-      alert(error.response?.data?.error || "Failed to update status");
+      alert(error.response?.data?.error || "Failed to assign bid");
     }
   };
 
@@ -100,6 +136,16 @@ export default function MemberDashboard() {
     if (categoryFilter !== "all" && bid.category_name !== categoryFilter)
       return false;
 
+    // Member filter
+    if (memberFilter !== "all") {
+      if (memberFilter === "unassigned" && bid.assigned_user_name) return false;
+      if (
+        memberFilter !== "unassigned" &&
+        bid.assigned_user_name !== memberFilter
+      )
+        return false;
+    }
+
     // Search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
@@ -125,7 +171,7 @@ export default function MemberDashboard() {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1>👤 My Bids</h1>
+        <h1>👤 All Bids</h1>
         <div className={styles.headerActions}>
           <span>Welcome, {user?.full_name}</span>
           <button onClick={logout} className={styles.logoutBtn}>
@@ -137,31 +183,35 @@ export default function MemberDashboard() {
       <div className={styles.stats}>
         <div className={styles.statCard}>
           <div className={styles.statNumber}>{bids.length}</div>
-          <div className={styles.statLabel}>Assigned Bids</div>
+          <div className={styles.statLabel}>Total Bids</div>
         </div>
         <div className={styles.statCard}>
           <div className={styles.statNumber}>
-            {bids.filter((b) => b.status === "considered").length}
+            {bids.filter((b) => b.status === "available").length}
           </div>
-          <div className={styles.statLabel}>To Start</div>
+          <div className={styles.statLabel}>Available</div>
         </div>
         <div className={styles.statCard}>
           <div className={styles.statNumber}>
-            {bids.filter((b) => b.status === "in-progress").length}
+            {bids.filter((b) => b.assigned_to === user?.id).length}
+          </div>
+          <div className={styles.statLabel}>Assigned to Me</div>
+        </div>
+        <div className={styles.statCard}>
+          <div className={styles.statNumber}>
+            {
+              bids.filter(
+                (b) => b.assigned_to === user?.id && b.status === "in-progress"
+              ).length
+            }
           </div>
           <div className={styles.statLabel}>In Progress</div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statNumber}>
-            {bids.filter((b) => b.status === "submitted").length}
-          </div>
-          <div className={styles.statLabel}>Submitted</div>
         </div>
       </div>
 
       <div className={styles.bidsSection}>
         <div className={styles.bidsControls}>
-          <h2>📋 Your Assigned Bids ({filteredBids.length})</h2>
+          <h2>📋 All Bids ({filteredBids.length})</h2>
 
           <div className={styles.searchBar}>
             <input
@@ -180,6 +230,7 @@ export default function MemberDashboard() {
               className={styles.filterSelect}
             >
               <option value="all">All Status</option>
+              <option value="available">Available</option>
               <option value="considered">To Start</option>
               <option value="in-progress">In Progress</option>
               <option value="submitted">Submitted</option>
@@ -194,6 +245,20 @@ export default function MemberDashboard() {
               {categories.map((category) => (
                 <option key={category} value={category}>
                   {category}
+                </option>
+              ))}
+            </select>
+
+            <select
+              value={memberFilter}
+              onChange={(e) => setMemberFilter(e.target.value)}
+              className={styles.filterSelect}
+            >
+              <option value="all">All Members</option>
+              <option value="unassigned">Unassigned</option>
+              {members.map((member) => (
+                <option key={member} value={member}>
+                  {member}
                 </option>
               ))}
             </select>
@@ -231,7 +296,7 @@ export default function MemberDashboard() {
                   <th>Department</th>
                   <th>Quantity</th>
                   <th>End Date</th>
-                  <th>Due Date</th>
+                  <th>Assigned To</th>
                   <th>Status</th>
                   <th>Actions</th>
                 </tr>
@@ -248,19 +313,26 @@ export default function MemberDashboard() {
                         ? new Date(bid.end_date).toLocaleDateString()
                         : "N/A"}
                     </td>
-                    <td>
-                      {bid.due_date
-                        ? new Date(bid.due_date).toLocaleDateString()
-                        : "N/A"}
-                    </td>
+                    <td>{bid.assigned_user_name || "Unassigned"}</td>
                     <td>
                       <span
-                        className={`${styles.statusBadge} ${styles[bid.status]}`}
+                        className={`${styles.statusBadge} ${
+                          styles[bid.status]
+                        }`}
                       >
                         {bid.status}
                       </span>
                     </td>
                     <td className={styles.actions}>
+                      {bid.status === "available" && !bid.assigned_to && (
+                        <button
+                          onClick={() => handleSelfAssign(bid.id)}
+                          className={styles.assignBtn}
+                          title="Assign to Me"
+                        >
+                          ✋ Assign
+                        </button>
+                      )}
                       <button
                         onClick={() => setSelectedBid(bid)}
                         className={styles.viewBtn}
@@ -309,17 +381,22 @@ export default function MemberDashboard() {
                       ? new Date(bid.end_date).toLocaleDateString()
                       : "N/A"}
                   </p>
-                  {bid.due_date && (
-                    <p>
-                      <strong>Due Date:</strong>{" "}
-                      {new Date(bid.due_date).toLocaleDateString()}
-                    </p>
-                  )}
+                  <p>
+                    <strong>Assigned To:</strong>{" "}
+                    {bid.assigned_user_name || "Unassigned"}
+                  </p>
                 </div>
                 <div className={styles.bidActions}>
+                  {bid.status === "available" && !bid.assigned_to && (
+                    <button onClick={() => handleSelfAssign(bid.id)}>
+                      ✋ Assign to Me
+                    </button>
+                  )}
                   <button onClick={() => setSelectedBid(bid)}>👁️ View</button>
                   <button
-                    onClick={() => handleDownload(bid.gem_bid_id, bid.bid_number)}
+                    onClick={() =>
+                      handleDownload(bid.gem_bid_id, bid.bid_number)
+                    }
                   >
                     📥 Download
                   </button>
@@ -335,7 +412,7 @@ export default function MemberDashboard() {
           bid={selectedBid}
           isAdmin={false}
           onClose={() => setSelectedBid(null)}
-          onStatusChange={handleUpdateStatus}
+          onStatusChange={() => {}}
           onDownload={handleDownload}
         />
       )}

@@ -229,6 +229,11 @@
   text-transform: uppercase;
 }
 
+.statusBadge.available {
+  background: #c6f6d5;
+  color: #22543d;
+}
+
 .statusBadge.considered {
   background: #bee3f8;
   color: #2c5282;
@@ -247,6 +252,22 @@
 .actions {
   display: flex;
   gap: 8px;
+}
+
+.assignBtn {
+  padding: 6px 12px;
+  border: none;
+  background: #48bb78;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.assignBtn:hover {
+  background: #38a169;
 }
 
 .viewBtn,
@@ -302,6 +323,11 @@
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
+}
+
+.status.available {
+  background: #c6f6d5;
+  color: #22543d;
 }
 
 .status.considered {

@@ -204,9 +204,13 @@ export default function BidDetailsModal({
           </div>
 
           {/* Assignment Section */}
-          {isAdmin && bid.status === "available" && onAssign && (
+          {isAdmin && onAssign && (
             <div className={styles.actionSection}>
-              <h3>Assign to Member</h3>
+              <h3>
+                {bid.assigned_to
+                  ? "Reassign Bid / Change Due Date"
+                  : "Assign to Member"}
+              </h3>
               <div className={styles.assignForm}>
                 <select
                   value={selectedMember}
@@ -232,55 +236,59 @@ export default function BidDetailsModal({
                   disabled={!selectedMember}
                   className={styles.primaryBtn}
                 >
-                  Assign Bid
+                  {bid.assigned_to ? "Update Assignment" : "Assign Bid"}
                 </button>
               </div>
             </div>
           )}
 
-          {/* Status Change Section */}
-          {!showStatusChange ? (
-            <div className={styles.actionSection}>
-              <button
-                onClick={() => setShowStatusChange(true)}
-                className={styles.secondaryBtn}
-              >
-                Change Status
-              </button>
-            </div>
-          ) : (
-            <div className={styles.actionSection}>
-              <h3>Change Status</h3>
-              {bid.status === "in-progress" && (
-                <div className={styles.formGroup}>
-                  <label>Document Link (required for submission)</label>
-                  <input
-                    type="text"
-                    value={docLink}
-                    onChange={(e) => setDocLink(e.target.value)}
-                    placeholder="https://..."
-                    className={styles.input}
-                  />
+          {/* Status Change Section - Only for Admin */}
+          {isAdmin && (
+            <>
+              {!showStatusChange ? (
+                <div className={styles.actionSection}>
+                  <button
+                    onClick={() => setShowStatusChange(true)}
+                    className={styles.secondaryBtn}
+                  >
+                    Change Status
+                  </button>
+                </div>
+              ) : (
+                <div className={styles.actionSection}>
+                  <h3>Change Status</h3>
+                  {bid.status === "in-progress" && (
+                    <div className={styles.formGroup}>
+                      <label>Document Link (required for submission)</label>
+                      <input
+                        type="text"
+                        value={docLink}
+                        onChange={(e) => setDocLink(e.target.value)}
+                        placeholder="https://..."
+                        className={styles.input}
+                      />
+                    </div>
+                  )}
+                  <div className={styles.statusButtons}>
+                    {availableStatusOptions.map((status) => (
+                      <button
+                        key={status}
+                        onClick={() => handleStatusChange(status)}
+                        className={`${styles.statusBtn} ${styles[status]}`}
+                      >
+                        {status.toUpperCase().replace("-", " ")}
+                      </button>
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => setShowStatusChange(false)}
+                    className={styles.cancelBtn}
+                  >
+                    Cancel
+                  </button>
                 </div>
               )}
-              <div className={styles.statusButtons}>
-                {availableStatusOptions.map((status) => (
-                  <button
-                    key={status}
-                    onClick={() => handleStatusChange(status)}
-                    className={`${styles.statusBtn} ${styles[status]}`}
-                  >
-                    {status.toUpperCase().replace("-", " ")}
-                  </button>
-                ))}
-              </div>
-              <button
-                onClick={() => setShowStatusChange(false)}
-                className={styles.cancelBtn}
-              >
-                Cancel
-              </button>
-            </div>
+            </>
           )}
         </div>
 

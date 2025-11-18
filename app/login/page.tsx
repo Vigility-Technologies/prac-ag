@@ -65,10 +65,6 @@ export default function LoginPage() {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
-
-        <p className={styles.link}>
-          Don't have an account? <a href="/register">Register here</a>
-        </p>
       </div>
     </div>
   );
