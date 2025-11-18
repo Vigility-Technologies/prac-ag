@@ -1,0 +1,14 @@
+# Docker ignore file for backend
+node_modules/
+npm-debug.log
+.env
+.env.*
+dist/
+*.log
+.DS_Store
+.vscode/
+.idea/
+coverage/
+.git/
+.gitignore
+README.md

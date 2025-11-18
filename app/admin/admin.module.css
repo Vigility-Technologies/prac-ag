@@ -1,0 +1,542 @@
+.container {
+  min-height: 100vh;
+  background: #f7fafc;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  font-size: 1.8rem;
+  color: #2d3748;
+  margin: 0;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logoutBtn {
+  padding: 8px 20px;
+  background: #e53e3e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.logoutBtn:hover {
+  background: #c53030;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.statCard {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.statNumber {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #667eea;
+  margin-bottom: 8px;
+}
+
+.statLabel {
+  font-size: 0.875rem;
+  color: #718096;
+  font-weight: 500;
+}
+
+.fetchSection {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
+}
+
+.fetchSection h2 {
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  color: #2d3748;
+}
+
+.fetchForm {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.fetchForm input {
+  flex: 1;
+  min-width: 200px;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.fetchForm button {
+  padding: 12px 30px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.fetchForm button:hover:not(:disabled) {
+  background: #5568d3;
+}
+
+.fetchForm button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bidsSection {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.bidsControls {
+  margin-bottom: 24px;
+}
+
+.bidsControls h2 {
+  margin: 0 0 16px 0;
+  color: #2d3748;
+  font-size: 1.3rem;
+}
+
+.searchBar {
+  margin-bottom: 16px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.filters {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filterSelect {
+  padding: 10px 14px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 180px;
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.viewToggle {
+  display: flex;
+  gap: 0;
+  margin-left: auto;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.viewToggle button {
+  padding: 10px 16px;
+  border: none;
+  background: white;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.2s;
+}
+
+.viewToggle button.active {
+  background: #667eea;
+}
+
+.viewToggle button:hover {
+  background: #f3f4f6;
+}
+
+.viewToggle button.active:hover {
+  background: #5568d3;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 60px 20px;
+  color: #718096;
+  font-size: 1.1rem;
+}
+
+.tableContainer {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.bidsTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bidsTable thead {
+  background: #f7fafc;
+}
+
+.bidsTable th {
+  padding: 14px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.bidsTable td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 0.9rem;
+  color: #4a5568;
+}
+
+.bidsTable tbody tr:hover {
+  background: #f7fafc;
+}
+
+.bidsTable .bidNumber {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.bidsTable .category {
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.statusBadge.available {
+  background: #c6f6d5;
+  color: #22543d;
+}
+
+.statusBadge.considered {
+  background: #bee3f8;
+  color: #2c5282;
+}
+
+.statusBadge.in-progress {
+  background: #feebc8;
+  color: #7c2d12;
+}
+
+.statusBadge.submitted {
+  background: #d6bcfa;
+  color: #44337a;
+}
+
+.statusBadge.rejected {
+  background: #fed7d7;
+  color: #742a2a;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.viewBtn,
+.downloadBtn {
+  padding: 6px 10px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.viewBtn:hover,
+.downloadBtn:hover {
+  background: #f7fafc;
+}
+
+.bidsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.bidsHeader h2 {
+  font-size: 1.3rem;
+  color: #2d3748;
+  margin: 0;
+}
+
+.bidsHeader select {
+  padding: 8px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.bidsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.bidCard {
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.bidCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.bidHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.bidNumber {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #2d3748;
+}
+
+.status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status.available {
+  background: #c6f6d5;
+  color: #22543d;
+}
+
+.status.considered {
+  background: #bee3f8;
+  color: #2c5282;
+}
+
+.status.in-progress {
+  background: #feebc8;
+  color: #7c2d12;
+}
+
+.status.submitted {
+  background: #d6bcfa;
+  color: #44337a;
+}
+
+.status.rejected {
+  background: #fed7d7;
+  color: #742a2a;
+}
+
+.bidInfo {
+  margin-bottom: 15px;
+}
+
+.bidInfo p {
+  margin: 8px 0;
+  font-size: 0.9rem;
+  color: #4a5568;
+}
+
+.bidInfo strong {
+  color: #2d3748;
+}
+
+.bidActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.bidActions button {
+  flex: 1;
+  padding: 8px 16px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.bidActions button:hover {
+  background: #5568d3;
+}
+
+.rejectBtn {
+  background: #e53e3e !important;
+}
+
+.rejectBtn:hover {
+  background: #c53030 !important;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+}
+
+.modalContent h2 {
+  margin-bottom: 20px;
+  color: #2d3748;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #2d3748;
+}
+
+.formGroup input,
+.formGroup select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.modalActions {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+}
+
+.modalActions button {
+  padding: 10px 25px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.modalActions button:first-child {
+  background: #667eea;
+  color: white;
+}
+
+.modalActions button:last-child {
+  background: #e2e8f0;
+  color: #2d3748;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.spinner {
+  border: 4px solid #f3f4f6;
+  border-top: 4px solid #667eea;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
