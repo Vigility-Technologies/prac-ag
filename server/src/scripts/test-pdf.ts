@@ -11,3 +11,5 @@ async function test() {
 }
 
 test();
+
+export {};

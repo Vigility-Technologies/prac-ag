@@ -8,3 +8,5 @@ console.log("pdf export:", pdf);
 if (typeof pdf !== "function" && typeof pdf.default === "function") {
   console.log("pdf.default is a function");
 }
+
+export {};

@@ -6,7 +6,7 @@ try {
   if (pdfNode.default) {
     console.log("Default export:", pdfNode.default);
   }
-} catch (e) {
+} catch (e: any) {
   console.error("Error requiring 'pdf-parse/node':", e.message);
 }
 
@@ -16,6 +16,6 @@ try {
   if (pdfMain.PDFParse) {
     console.log("Has PDFParse class");
   }
-} catch (e) {
+} catch (e: any) {
   console.error("Error requiring 'pdf-parse':", e.message);
 }
