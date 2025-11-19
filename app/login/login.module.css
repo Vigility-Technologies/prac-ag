@@ -3,17 +3,30 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gray-50);
   padding: 20px;
 }
 
 .card {
-  background: white;
+  background: var(--color-surface);
   padding: 40px;
-  border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
   width: 100%;
   max-width: 450px;
+  border: 1px solid var(--color-border);
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .title {
@@ -21,12 +34,12 @@
   font-weight: 700;
   text-align: center;
   margin-bottom: 0.5rem;
-  color: #1a202c;
+  color: var(--color-text-main);
 }
 
 .subtitle {
   text-align: center;
-  color: #718096;
+  color: var(--color-text-secondary);
   margin-bottom: 2rem;
 }
 
@@ -43,69 +56,82 @@
 }
 
 .formGroup label {
-  font-weight: 500;
-  color: #2d3748;
+  font-weight: 600;
+  color: var(--color-text-main);
   font-size: 0.875rem;
 }
 
 .formGroup input,
 .formGroup select {
   padding: 12px 16px;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   font-size: 1rem;
-  transition: all 0.2s;
+  transition: var(--transition-fast);
+  background: var(--gray-50);
+  color: var(--color-text-main);
 }
 
 .formGroup input:focus,
 .formGroup select:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--color-primary);
+  background: white;
+  box-shadow: 0 0 0 3px var(--primary-100);
 }
 
 .button {
   padding: 14px 24px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-primary);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: var(--transition-fast);
+  margin-top: 0.5rem;
 }
 
 .button:hover:not(:disabled) {
-  transform: translateY(-2px);
+  background: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  background: var(--gray-400);
 }
 
 .error {
-  background: #fed7d7;
-  color: #c53030;
+  background: var(--error-50);
+  color: var(--error-700);
   padding: 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-size: 0.875rem;
+  border: 1px solid var(--error-200);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .link {
   text-align: center;
   margin-top: 1.5rem;
-  color: #718096;
+  color: var(--color-text-secondary);
   font-size: 0.875rem;
 }
 
 .link a {
-  color: #667eea;
+  color: var(--color-primary);
   font-weight: 600;
   text-decoration: none;
+  transition: color 0.2s;
 }
 
 .link a:hover {
+  color: var(--color-primary-hover);
   text-decoration: underline;
 }
