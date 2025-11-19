@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
+import { bidsAPI } from "@/lib/api";
 import styles from "./BidDetailsModal.module.css";
 
 interface Bid {
@@ -17,6 +19,7 @@ interface Bid {
   assigned_user_name?: string;
   due_date?: string;
   submitted_doc_link?: string;
+  bid_preparation_guide?: string;
   created_at: string;
   updated_at: string;
 }
@@ -31,6 +34,7 @@ interface BidDetailsModalProps {
   bid: Bid;
   members?: Member[];
   isAdmin: boolean;
+  initialShowPQ?: boolean;
   onClose: () => void;
   onAssign?: (
     bidId: string,
@@ -44,21 +48,55 @@ interface BidDetailsModalProps {
     submittedDocLink?: string
   ) => void;
   onDownload: (gemBidId: string, bidNumber: string) => void;
+  onGuideGenerated?: (bidId: string, guide: string) => void;
 }
 
 export default function BidDetailsModal({
   bid,
   members = [],
   isAdmin,
+  initialShowPQ = false,
   onClose,
   onAssign,
   onStatusChange,
   onDownload,
+  onGuideGenerated,
 }: BidDetailsModalProps) {
   const [selectedMember, setSelectedMember] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [docLink, setDocLink] = useState(bid.submitted_doc_link || "");
   const [showStatusChange, setShowStatusChange] = useState(false);
+  const [pqGuide, setPqGuide] = useState(bid.bid_preparation_guide || "");
+  const [loadingPQ, setLoadingPQ] = useState(false);
+  const [showPQModal, setShowPQModal] = useState(initialShowPQ);
+
+  const handleCheckPQ = async () => {
+    if (pqGuide) {
+      setShowPQModal(true);
+      return;
+    }
+
+    setLoadingPQ(true);
+    try {
+      const response = await bidsAPI.checkPQ(bid.id);
+      setPqGuide(response.data.guide);
+      if (onGuideGenerated) {
+        onGuideGenerated(bid.id, response.data.guide);
+      }
+      setShowPQModal(true);
+    } catch (error) {
+      console.error("Failed to check PQ:", error);
+      alert("Failed to generate Bid Preparation Guide");
+    } finally {
+      setLoadingPQ(false);
+    }
+  };
+
+  useEffect(() => {
+    if (initialShowPQ && !pqGuide && !loadingPQ) {
+      handleCheckPQ();
+    }
+  }, [initialShowPQ]);
 
   const handleAssign = () => {
     if (!selectedMember || !onAssign) return;
@@ -294,6 +332,14 @@ export default function BidDetailsModal({
 
         <div className={styles.modalFooter}>
           <button
+            onClick={handleCheckPQ}
+            className={styles.secondaryBtn}
+            disabled={loadingPQ}
+            style={{ marginRight: "10px" }}
+          >
+            {loadingPQ ? "Generating Guide..." : "📋 Check PQ"}
+          </button>
+          <button
             onClick={() => onDownload(bid.gem_bid_id, bid.bid_number)}
             className={styles.downloadBtn}
           >
@@ -304,6 +350,52 @@ export default function BidDetailsModal({
           </button>
         </div>
       </div>
+
+      {/* PQ Guide Modal */}
+      {showPQModal && (
+        <div
+          className={styles.modalOverlay}
+          style={{ zIndex: 1100 }}
+          onClick={() => setShowPQModal(false)}
+        >
+          <div
+            className={styles.modalContent}
+            style={{
+              maxWidth: "800px",
+              maxHeight: "90vh",
+              display: "flex",
+              flexDirection: "column",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.modalHeader}>
+              <h2>Bid Preparation Guide</h2>
+              <button
+                className={styles.closeBtn}
+                onClick={() => setShowPQModal(false)}
+              >
+                ✕
+              </button>
+            </div>
+            <div
+              className={styles.modalBody}
+              style={{ overflowY: "auto", flex: 1 }}
+            >
+              <div className={styles.markdownContent}>
+                <ReactMarkdown>{pqGuide}</ReactMarkdown>
+              </div>
+            </div>
+            <div className={styles.modalFooter}>
+              <button
+                onClick={() => setShowPQModal(false)}
+                className={styles.closeFooterBtn}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

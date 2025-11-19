@@ -60,6 +60,7 @@ export const bidsAPI = {
     api.get("/api/bids/stats", { params: { category } }),
   downloadDocument: (gemBidId: string) =>
     api.get(`/api/bids/document/${gemBidId}`, { responseType: "blob" }),
+  checkPQ: (bidId: string) => api.post(`/api/bids/${bidId}/check-pq`),
 };
 
 export default api;

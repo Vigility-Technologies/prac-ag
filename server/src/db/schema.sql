@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS bids (
   assigned_user_name VARCHAR(255),
   due_date TIMESTAMP WITH TIME ZONE,
   submitted_doc_link TEXT,
+  bid_preparation_guide TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -98,3 +99,11 @@ CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users
 
 CREATE TRIGGER update_bids_updated_at BEFORE UPDATE ON bids
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- Add bid_preparation_guide column if it doesn't exist
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'bids' AND column_name = 'bid_preparation_guide') THEN
+        ALTER TABLE bids ADD COLUMN bid_preparation_guide TEXT;
+    END IF;
+END $$;

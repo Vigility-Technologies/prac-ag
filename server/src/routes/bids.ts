@@ -3,6 +3,8 @@ import { body, validationResult } from "express-validator";
 import { supabase } from "../config/supabase";
 import { authenticate, isAdmin } from "../middleware/auth";
 import { AuthRequest } from "../types";
+import { genAI } from "../config/gemini";
+const pdf = require("pdf-parse");
 
 const router = Router();
 
@@ -643,6 +645,145 @@ router.get(
     } catch (error: any) {
       console.error("Download document error:", error);
       res.status(500).json({ error: "Failed to download document" });
+    }
+  }
+);
+
+// Generate Bid Preparation Guide (Check PQ)
+router.post(
+  "/:bidId/check-pq",
+  authenticate,
+  async (req: Request, res: Response) => {
+    try {
+      const { bidId } = req.params;
+
+      // 1. Get bid details
+      const { data: bid, error: bidError } = await supabase
+        .from("bids")
+        .select("gem_bid_id, bid_preparation_guide")
+        .eq("id", bidId)
+        .single();
+
+      if (bidError || !bid) {
+        return res.status(404).json({ error: "Bid not found" });
+      }
+
+      // Check if guide already exists
+      if (bid.bid_preparation_guide) {
+        return res.json({ guide: bid.bid_preparation_guide });
+      }
+
+      // 2. Download PDF
+      const documentUrl = `https://bidplus.gem.gov.in/showbidDocument/${bid.gem_bid_id}`;
+      console.log(`Downloading PDF from: ${documentUrl}`);
+
+      const response = await fetch(documentUrl, {
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+          Accept: "application/pdf,application/x-download",
+        },
+      });
+
+      console.log(
+        `Response status: ${
+          response.status
+        }, Content-Type: ${response.headers.get("content-type")}`
+      );
+
+      if (!response.ok) {
+        return res
+          .status(400)
+          .json({ error: "Failed to download bid document from GEM" });
+      }
+
+      const arrayBuffer = await response.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      console.log(`PDF Buffer size: ${buffer.length} bytes`);
+
+      if (buffer.length === 0) {
+        throw new Error("Downloaded PDF file is empty");
+      }
+
+      const contentType = response.headers.get("content-type") || "";
+      if (contentType.includes("text/html")) {
+        const htmlContent = buffer.toString().substring(0, 200);
+        console.error("Received HTML instead of PDF:", htmlContent);
+        throw new Error(
+          "Received HTML response instead of PDF. The GEM portal might be blocking the request."
+        );
+      }
+
+      // 3. Parse PDF
+      let text = "";
+      try {
+        const data = await pdf(buffer);
+        text = data.text;
+      } catch (pdfError: any) {
+        console.error("PDF Parse Error:", pdfError);
+        // Fallback or rethrow
+        throw new Error("Failed to parse PDF content: " + pdfError.message);
+      }
+
+      // 4. Generate Guide with Gemini
+      const prompt = `
+        You are an expert Bid Manager for GeM (Government e-Marketplace). 
+        Analyze the following Bid Document text and create a structured "Bid Preparation Guide".
+        
+        Structure required:
+        1. Scope of Work & Technical Requirements (Core Supply, Technical Features, Service Scope)
+        2. Pre-Qualification (PQ) Criteria (OEM Authorization, Experience, Turnover, Local Content, etc.)
+        3. Bid Submission Checklist (Part A: Admin/Financial, Part B: Technical)
+        4. Important Bid Details (Dates, EMD, ePBG, Consignee)
+
+        Make sure to extract specific details like Quantity, Mandatory Combos, specific certifications required, and any "Additional Docs" mentioned.
+        
+        Bid Document Text:
+        ${text.substring(0, 30000)}
+      `;
+
+      const result = await genAI.models.generateContent({
+        model: "gemini-2.0-flash",
+        contents: [
+          {
+            role: "user",
+            parts: [
+              {
+                text: prompt,
+              },
+            ],
+          },
+        ],
+      });
+
+      const responseText = result.text || "";
+
+      // 5. Save to Database
+      const { error: updateError } = await supabase
+        .from("bids")
+        .update({
+          bid_preparation_guide: responseText,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", bidId);
+
+      if (updateError) {
+        console.error("Failed to save guide to DB:", updateError);
+        // Return the guide even if saving fails, but include a warning
+        return res.json({
+          guide: responseText,
+          warning:
+            "Guide generated but could not be saved to database. Please ensure 'bid_preparation_guide' column exists.",
+        });
+      }
+
+      res.json({ guide: responseText });
+    } catch (error: any) {
+      console.error("Check PQ error:", error);
+      res.status(500).json({
+        error: "Failed to generate Bid Preparation Guide",
+        details: error.message,
+      });
     }
   }
 );

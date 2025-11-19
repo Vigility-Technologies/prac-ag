@@ -21,6 +21,7 @@ interface Bid {
   assigned_user_name?: string;
   due_date?: string;
   submitted_doc_link?: string;
+  bid_preparation_guide?: string;
   created_at: string;
   updated_at: string;
 }
@@ -38,6 +39,7 @@ export default function MemberDashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"cards" | "table">("table");
   const [selectedBid, setSelectedBid] = useState<Bid | null>(null);
+  const [openGuideDirectly, setOpenGuideDirectly] = useState(false);
 
   useEffect(() => {
     if (!authLoading) {
@@ -125,6 +127,19 @@ export default function MemberDashboard() {
       link.remove();
     } catch (error) {
       alert("Failed to download document");
+    }
+  };
+
+  const handleGuideGenerated = (bidId: string, guide: string) => {
+    setBids((prevBids) =>
+      prevBids.map((bid) =>
+        bid.id === bidId ? { ...bid, bid_preparation_guide: guide } : bid
+      )
+    );
+    if (selectedBid && selectedBid.id === bidId) {
+      setSelectedBid((prev) =>
+        prev ? { ...prev, bid_preparation_guide: guide } : null
+      );
     }
   };
 
@@ -298,6 +313,7 @@ export default function MemberDashboard() {
                   <th>End Date</th>
                   <th>Assigned To</th>
                   <th>Status</th>
+                  <th>PQ Guide</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -323,6 +339,29 @@ export default function MemberDashboard() {
                         {bid.status}
                       </span>
                     </td>
+                    <td>
+                      {bid.bid_preparation_guide ? (
+                        <button
+                          onClick={() => {
+                            setOpenGuideDirectly(true);
+                            setSelectedBid(bid);
+                          }}
+                          className={styles.viewBtn}
+                        >
+                          View Guide
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => {
+                            setOpenGuideDirectly(true);
+                            setSelectedBid(bid);
+                          }}
+                          className={styles.generateBtn}
+                        >
+                          Generate
+                        </button>
+                      )}
+                    </td>
                     <td className={styles.actions}>
                       {bid.status === "available" && !bid.assigned_to && (
                         <button
@@ -330,15 +369,18 @@ export default function MemberDashboard() {
                           className={styles.assignBtn}
                           title="Assign to Me"
                         >
-                          ✋ Assign
+                          Assign
                         </button>
                       )}
                       <button
-                        onClick={() => setSelectedBid(bid)}
+                        onClick={() => {
+                          setOpenGuideDirectly(false);
+                          setSelectedBid(bid);
+                        }}
                         className={styles.viewBtn}
                         title="View Details"
                       >
-                        👁️
+                        View
                       </button>
                       <button
                         onClick={() =>
@@ -347,7 +389,7 @@ export default function MemberDashboard() {
                         className={styles.downloadBtn}
                         title="Download"
                       >
-                        📥
+                        Download
                       </button>
                     </td>
                   </tr>
@@ -385,20 +427,33 @@ export default function MemberDashboard() {
                     <strong>Assigned To:</strong>{" "}
                     {bid.assigned_user_name || "Unassigned"}
                   </p>
+                  {bid.bid_preparation_guide && (
+                    <p>
+                      <strong>PQ Guide:</strong>{" "}
+                      <span style={{ color: "green" }}>Generated</span>
+                    </p>
+                  )}
                 </div>
                 <div className={styles.bidActions}>
                   {bid.status === "available" && !bid.assigned_to && (
                     <button onClick={() => handleSelfAssign(bid.id)}>
-                      ✋ Assign to Me
+                      Assign to Me
                     </button>
                   )}
-                  <button onClick={() => setSelectedBid(bid)}>👁️ View</button>
+                  <button
+                    onClick={() => {
+                      setOpenGuideDirectly(false);
+                      setSelectedBid(bid);
+                    }}
+                  >
+                    View
+                  </button>
                   <button
                     onClick={() =>
                       handleDownload(bid.gem_bid_id, bid.bid_number)
                     }
                   >
-                    📥 Download
+                    Download
                   </button>
                 </div>
               </div>
@@ -411,9 +466,14 @@ export default function MemberDashboard() {
         <BidDetailsModal
           bid={selectedBid}
           isAdmin={false}
-          onClose={() => setSelectedBid(null)}
+          initialShowPQ={openGuideDirectly}
+          onClose={() => {
+            setSelectedBid(null);
+            setOpenGuideDirectly(false);
+          }}
           onStatusChange={() => {}}
           onDownload={handleDownload}
+          onGuideGenerated={handleGuideGenerated}
         />
       )}
     </div>

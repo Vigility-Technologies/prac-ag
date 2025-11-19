@@ -344,25 +344,50 @@
 }
 
 .viewBtn,
-.downloadBtn {
-  padding: 8px;
-  border: 1px solid transparent;
-  background: transparent;
+.downloadBtn,
+.generateBtn {
+  padding: 6px 12px;
+  border: none;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 0.85rem;
+  font-weight: 500;
   border-radius: var(--radius-md);
   transition: var(--transition-fast);
-  color: var(--color-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.viewBtn {
+  background: var(--primary-600);
+  color: white;
 }
 
 .viewBtn:hover {
-  background: var(--primary-50);
-  color: var(--color-primary);
+  background: var(--primary-700);
+  transform: translateY(-1px);
+}
+
+.downloadBtn {
+  background: var(--gray-200);
+  color: var(--color-text-main);
 }
 
 .downloadBtn:hover {
-  background: var(--success-50);
-  color: var(--success-600);
+  background: var(--gray-300);
+  transform: translateY(-1px);
+}
+
+.generateBtn {
+  background: #8b5cf6;
+  color: white;
+}
+
+.generateBtn:hover {
+  background: #7c3aed;
+  transform: translateY(-1px);
 }
 
 .bidsGrid {
