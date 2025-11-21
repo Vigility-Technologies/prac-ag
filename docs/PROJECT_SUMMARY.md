@@ -107,7 +107,8 @@ project/
 │
 ├── README.md                       # Updated documentation
 ├── SETUP_GUIDE.md                  # Step-by-step setup
-├── start-dev.sh                    # Quick start script
+├── scripts/
+│   └── start-dev.sh                # Quick start script
 └── .env.local.example              # Frontend env template
 ```
 
@@ -153,7 +154,7 @@ Two main tables in Supabase:
 
 1. Set up Supabase (see SETUP_GUIDE.md)
 2. Configure environment variables
-3. Run: `./start-dev.sh`
+3. Run: `./scripts/start-dev.sh`
 
 ### Manual Start
 
@@ -178,7 +179,7 @@ npm run dev
 2. **Run Database Schema**: Execute `server/src/db/schema.sql` in Supabase SQL Editor
 3. **Configure Environment**: Set up .env files with your credentials
 4. **Install Dependencies**: Run `npm install` in both server and root
-5. **Start Servers**: Use `./start-dev.sh` or start manually
+5. **Start Servers**: Use `./scripts/start-dev.sh` or start manually
 6. **Register First Admin**: Go to <http://localhost:3000> and create admin account
 7. **Get CSRF Token**: From GEM portal (see SETUP_GUIDE.md Step 9)
 8. **Fetch Bids**: Use admin dashboard to import bids

@@ -55,7 +55,7 @@ nano .env
 # Fill in all variables
 
 # 3. Deploy
-./deploy-docker.sh
+./scripts/deploy-docker.sh
 ```
 
 **What it does:**
