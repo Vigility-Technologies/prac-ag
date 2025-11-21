@@ -115,7 +115,7 @@ sudo systemctl status nginx
 
 ## After Nginx is Running
 
-### Test from your computer:
+### Test from your computer
 
 ```bash
 # Replace YOUR_EC2_IP with your actual EC2 public IP
@@ -123,9 +123,9 @@ curl http://YOUR_EC2_IP/
 curl http://YOUR_EC2_IP/api/health
 ```
 
-### Open in browser:
+### Open in browser
 
-```
+```text
 http://YOUR_EC2_IP
 ```
 

@@ -320,7 +320,7 @@ aws ecr create-repository --repository-name gem-bot-frontend
 aws ecr create-repository --repository-name gem-bot-backend
 
 # Build and push
-# (Commands will be in the docker-compose file)
+# (Commands will be in the docker compose file)
 ```
 
 ### Step 3: Deploy to ECS
@@ -350,7 +350,7 @@ app.use(
 **Using Route 53:**
 
 1. Register or transfer domain to Route 53
-2. Create A record pointing to EC2 elastic IP
+2. Create a record pointing to EC2 elastic IP
 3. For Amplify, it provides a subdomain or you can add custom domain
 
 ### 3. Monitoring

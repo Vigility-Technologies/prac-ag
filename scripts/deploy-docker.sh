@@ -21,12 +21,12 @@ if [ ! -f .env ]; then
 fi
 
 echo -e "${BLUE}Building Docker images...${NC}"
-docker-compose build
+docker compose build
 
 echo -e "${GREEN}✓ Images built${NC}"
 
 echo -e "${BLUE}Starting containers...${NC}"
-docker-compose up -d
+docker compose up -d
 
 echo -e "${GREEN}✓ Containers started${NC}"
 
@@ -36,7 +36,7 @@ sleep 10
 
 # Check container status
 echo -e "${BLUE}Container status:${NC}"
-docker-compose ps
+docker compose ps
 
 # Display logs
 echo ""
@@ -48,8 +48,8 @@ echo -e "Frontend: ${BLUE}http://localhost:3000${NC}"
 echo -e "Backend:  ${BLUE}http://localhost:5000${NC}"
 echo ""
 echo -e "To view logs:"
-echo -e "  ${BLUE}docker-compose logs -f${NC}"
+echo -e "  ${BLUE}docker compose logs -f${NC}"
 echo ""
 echo -e "To stop:"
-echo -e "  ${BLUE}docker-compose down${NC}"
+echo -e "  ${BLUE}docker compose down${NC}"
 echo ""

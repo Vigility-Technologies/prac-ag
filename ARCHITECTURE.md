@@ -1,6 +1,6 @@
 # System Architecture Diagram
 
-```
+````text
 ┌─────────────────────────────────────────────────────────────────┐
 │                         GEM PORTAL                              │
 │                  https://bidplus.gem.gov.in                     │
@@ -78,10 +78,11 @@
 └─────────────────────────────────────────────────────────────────┘
 
 
-# User Flow Diagrams
+## User Flow Diagrams
 
 ## Admin Flow
-```
+
+```text
 
 1. Admin Login
    ↓
@@ -97,10 +98,11 @@
    ↓
 7. Reject Unwanted Bids
 
-```
+````
 
 ## Member Flow
-```
+
+```text
 
 1. Member Login
    ↓
@@ -117,7 +119,8 @@
 ```
 
 ## Bid Status Lifecycle
-```
+
+```text
 
 [Available]
 ↓ (Admin assigns to member)
@@ -135,8 +138,9 @@ OR
 
 ```
 
-# Authentication Flow
-```
+## Authentication Flow
+
+```text
 
 ┌──────────┐
 │ Client │
@@ -169,8 +173,9 @@ OR
 
 ```
 
-# Data Flow - Fetching Bids
-```
+## Data Flow - Fetching Bids
+
+```text
 
 ┌─────────┐
 │ Admin │
@@ -212,8 +217,9 @@ OR
 
 ```
 
-# Security Layers
-```
+## Security Layers
+
+```text
 
 ┌─────────────────────────────────────┐
 │ 1. HTTPS (Production) │
@@ -235,8 +241,9 @@ OR
 
 ```
 
-# Deployment Architecture
-```
+## Deployment Architecture
+
+```text
 
 ┌──────────────────┐
 │ Vercel/Netlify │ ← Next.js Frontend
@@ -251,7 +258,5 @@ OR
 ┌──────────────────┐
 │ Supabase Cloud │ ← PostgreSQL Database
 └──────────────────┘
-
-```
 
 ```

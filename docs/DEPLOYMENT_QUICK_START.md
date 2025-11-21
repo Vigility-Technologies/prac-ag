@@ -47,7 +47,7 @@ nano .env
 # On Ubuntu:
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
-sudo apt install docker-compose
+# Docker Compose V2 is included with Docker Engine
 
 # 2. Setup environment
 cp .env.example .env
@@ -61,20 +61,20 @@ nano .env
 **What it does:**
 
 - Builds Docker images for frontend & backend
-- Starts all services with docker-compose
+- Starts all services with docker compose
 - Configures Nginx for routing
 
 **Manage containers:**
 
 ```bash
 # View logs
-docker-compose logs -f
+docker compose logs -f
 
 # Stop services
-docker-compose down
+docker compose down
 
 # Restart services
-docker-compose restart
+docker compose restart
 ```
 
 ---
@@ -187,7 +187,7 @@ ssh -i your-ec2-ip "pm2 restart all"
 ### Update application (EC2)
 
 ```bash
-ssh -i your-key.pem ubuntu@your-ec2-ip << 'EOF'
+ssh -i your-key.pem ubuntu@your-ec2-ip
 cd ~/gem-agent
 git pull origin main
 cd nextjs-app/server
@@ -196,7 +196,6 @@ pm2 restart gem-bot-backend
 cd ..
 npm install && npm run build
 pm2 restart gem-bot-frontend
-EOF
 ```
 
 ---

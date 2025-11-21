@@ -46,12 +46,12 @@ Comprehensive UI/UX improvements for the GEM Bid Management system with enhanced
 
 ### 4. **Backend Enhancements**
 
-#### New API Endpoints:
+#### New API Endpoints
 
 - **GET `/api/bids/categories`**: Get all unique categories
 - **POST `/api/users/members/bulk`**: Bulk create members (admin only)
 
-#### Enhanced Endpoints with Query Parameters:
+#### Enhanced Endpoints with Query Parameters
 
 - **GET `/api/bids/available?category=<name>`**: Filter by category
 - **GET `/api/bids/my-bids?category=<name>`**: Filter member bids by category
@@ -74,7 +74,7 @@ Comprehensive UI/UX improvements for the GEM Bid Management system with enhanced
 
 ## 🎨 UI Components
 
-### Table View Features:
+### Table View Features
 
 - Responsive table design
 - Hover effects on rows
@@ -83,7 +83,7 @@ Comprehensive UI/UX improvements for the GEM Bid Management system with enhanced
 - Status badges with color coding
 - Text truncation for long category names
 
-### Card View Features:
+### Card View Features
 
 - Grid layout (responsive)
 - Hover animations
@@ -91,7 +91,7 @@ Comprehensive UI/UX improvements for the GEM Bid Management system with enhanced
 - Quick action buttons
 - Clean, modern design
 
-### Bid Details Modal:
+### Bid Details Modal
 
 - Full-screen overlay with click-outside to close
 - Comprehensive bid information
@@ -103,7 +103,7 @@ Comprehensive UI/UX improvements for the GEM Bid Management system with enhanced
 
 ## 🎨 Design System
 
-### Color Coding for Status:
+### Color Coding for Status
 
 - **Available**: Green (`#c6f6d5` / `#22543d`)
 - **Considered**: Blue (`#bee3f8` / `#2c5282`)
@@ -111,14 +111,14 @@ Comprehensive UI/UX improvements for the GEM Bid Management system with enhanced
 - **Submitted**: Purple (`#d6bcfa` / `#44337a`)
 - **Rejected**: Red (`#fed7d7` / `#742a2a`)
 
-### Typography:
+### Typography
 
 - Headers: Bold, large fonts
 - Body: Clean, readable 14-16px
 - Monospace for IDs
 - Uppercase for labels and status
 
-### Spacing & Layout:
+### Spacing & Layout
 
 - Consistent 8px grid system
 - Generous padding (16-32px)
@@ -127,13 +127,13 @@ Comprehensive UI/UX improvements for the GEM Bid Management system with enhanced
 
 ## 📱 Responsive Design
 
-### Breakpoints:
+### Breakpoints
 
 - **Desktop**: Table view default, full filters
 - **Tablet**: Stacked filters, responsive table
 - **Mobile**: Card view recommended, collapsible filters
 
-### Mobile Optimizations:
+### Mobile Optimizations
 
 - Touch-friendly buttons (min 44px)
 - Full-width inputs
@@ -142,7 +142,7 @@ Comprehensive UI/UX improvements for the GEM Bid Management system with enhanced
 
 ## 🚀 How to Use
 
-### For Admins:
+### For Admins
 
 1. **View Bids**: See all bids in table or card view
 2. **Search**: Type in search bar to filter
@@ -152,7 +152,7 @@ Comprehensive UI/UX improvements for the GEM Bid Management system with enhanced
 6. **Change Status**: Click "Change Status" in modal
 7. **Download**: Click 📥 to download bid document
 
-### For Members:
+### For Members
 
 1. **View Assigned Bids**: See your bids in table or card view
 2. **Search & Filter**: Find specific bids quickly
@@ -163,7 +163,7 @@ Comprehensive UI/UX improvements for the GEM Bid Management system with enhanced
 
 ## 📊 Data Flow
 
-```
+```text
 1. Admin fetches bids from GEM portal
    ↓
 2. Bids stored in database with categories
@@ -183,7 +183,7 @@ Comprehensive UI/UX improvements for the GEM Bid Management system with enhanced
 
 ## 🔐 Permissions
 
-### Admin Can:
+### Admin Can
 
 - ✅ Fetch bids from GEM portal
 - ✅ View all bids
@@ -194,7 +194,7 @@ Comprehensive UI/UX improvements for the GEM Bid Management system with enhanced
 - ✅ Download documents
 - ✅ Bulk create members
 
-### Members Can:
+### Members Can
 
 - ✅ View assigned bids only
 - ✅ Filter by status and category
