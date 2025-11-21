@@ -4,7 +4,7 @@
 
 ### Step 1: Create Supabase Project
 
-1. Go to https://supabase.com and create an account
+1. Go to <https://supabase.com> and create an account
 2. Create a new project
 3. Wait for the project to initialize (2-3 minutes)
 4. Go to **SQL Editor** in the left sidebar
@@ -37,6 +37,7 @@ cp .env.example .env
 # JWT_SECRET=<generate-random-string-here>
 # JWT_EXPIRES_IN=7d
 # FRONTEND_URL=http://localhost:3000
+# GEMINI_API_KEY=<your-gemini-api-key>
 ```
 
 To generate JWT_SECRET, you can use:
@@ -87,7 +88,7 @@ You should see the Next.js app starting on `http://localhost:3000`
 2. Click "Register here"
 3. Create an admin account:
    - Full Name: Your Name
-   - Email: your@email.com
+   - Email: `your@email.com` (example)
    - Password: (min 6 characters)
    - Role: Admin
 4. Click Register
@@ -95,7 +96,7 @@ You should see the Next.js app starting on `http://localhost:3000`
 
 ### Step 9: Get GEM CSRF Token
 
-1. Go to https://bidplus.gem.gov.in
+1. Go to <https://bidplus.gem.gov.in>
 2. Open Browser DevTools (F12)
 3. Go to Console tab
 4. Type: `document.cookie`
@@ -110,7 +111,7 @@ You should see the Next.js app starting on `http://localhost:3000`
 
 ## 🎯 Usage Guide
 
-### As Admin:
+### As Admin
 
 1. **Fetch Bids**: Use GEM CSRF token to import bids
 2. **View Bids**: See all available bids (rejected ones are hidden)
@@ -118,7 +119,7 @@ You should see the Next.js app starting on `http://localhost:3000`
 4. **Track Progress**: Monitor status of all bids
 5. **Reject Bids**: Click "Reject" to permanently hide unwanted bids
 
-### As Member:
+### As Member
 
 1. **View Assigned Bids**: See bids assigned to you
 2. **Start Work**: Click "Start Work" to change status to In Progress
@@ -127,7 +128,7 @@ You should see the Next.js app starting on `http://localhost:3000`
 
 ## 📊 Bid Status Flow
 
-```
+```text
 Available → Considered → In Progress → Submitted
            ↓
         Rejected (hidden forever)

@@ -108,6 +108,7 @@ JWT_EXPIRES_IN=7d
 FRONTEND_URL=https://your-frontend-domain.com
 SUPABASE_URL=your-supabase-url
 SUPABASE_SERVICE_KEY=your-supabase-service-key
+GEMINI_API_KEY=your-gemini-api-key
 ```
 
 ```bash
@@ -209,17 +210,17 @@ frontend:
       - node_modules/**/*
 ```
 
-5. **Environment Variables**:
+1. **Environment Variables**:
 
    - Add `NEXT_PUBLIC_API_URL` with your backend URL
 
-6. **Deploy** and wait for completion
+2. **Deploy** and wait for completion
 
 ---
 
-## Option 2: Full EC2 Deployment
+## Option 2: Full EC2 Deployment (Detailed Steps)
 
-### Step 1: Launch EC2 Instance
+### Step 1: Launch EC2 Instance for Full Deployment
 
 Same as Option 1, Part A, Step 1
 
@@ -433,20 +434,20 @@ pm2 monit
 
 ## Cost Estimation
 
-### Option 1 (Amplify + EC2):
+### Option 1 (Amplify + EC2)
 
 - EC2 t3.micro: $7-10/month
 - Amplify: $0-15/month (depending on traffic)
 - Data transfer: $5-10/month
 - **Total: ~$15-35/month**
 
-### Option 2 (Full EC2):
+### Option 2 (Full EC2)
 
 - EC2 t3.small: $15-20/month
 - Data transfer: $5-10/month
 - **Total: ~$20-30/month**
 
-### Option 3 (ECS Fargate):
+### Option 3 (ECS Fargate)
 
 - Fargate tasks: $30-40/month
 - Load balancer: $16/month

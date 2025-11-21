@@ -44,7 +44,7 @@ A comprehensive bid management system with Express backend, Supabase database, a
 
 ## 📁 Project Structure
 
-```
+```plaintext
 ├── server/                    # Express backend
 │   ├── src/
 │   │   ├── config/           # Supabase configuration
@@ -100,6 +100,7 @@ cp .env.example .env
 # - SUPABASE_SERVICE_KEY
 # - JWT_SECRET (generate a random string)
 # - FRONTEND_URL (default: http://localhost:3000)
+# - GEMINI_API_KEY (for AI bid preparation guide generation)
 
 # Run development server
 npm run dev
@@ -127,7 +128,7 @@ The frontend will run on `http://localhost:3000`
 
 ## 🔑 API Endpoints
 
-### Authentication
+### Auth Endpoints
 
 - `POST /api/auth/register` - Register new user
 - `POST /api/auth/login` - Login
@@ -213,7 +214,7 @@ npm start
 
 ### Backend (.env)
 
-```
+```env
 PORT=5000
 NODE_ENV=production
 SUPABASE_URL=your_supabase_url
@@ -222,11 +223,12 @@ SUPABASE_SERVICE_KEY=your_service_key
 JWT_SECRET=your_jwt_secret
 JWT_EXPIRES_IN=7d
 FRONTEND_URL=https://your-frontend-url.com
+GEMINI_API_KEY=your_gemini_api_key
 ```
 
 ### Frontend (.env.local)
 
-```
+```env
 NEXT_PUBLIC_API_URL=https://your-backend-url.com
 ```
 

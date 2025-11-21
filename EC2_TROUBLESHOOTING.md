@@ -201,6 +201,7 @@ JWT_EXPIRES_IN=7d
 FRONTEND_URL=http://your-ec2-ip
 SUPABASE_URL=https://xxxxx.supabase.co
 SUPABASE_SERVICE_KEY=your-service-key
+GEMINI_API_KEY=your-gemini-api-key
 ```
 
 **Check frontend .env:**
@@ -302,6 +303,7 @@ JWT_EXPIRES_IN=7d
 FRONTEND_URL=http://YOUR_EC2_PUBLIC_IP
 SUPABASE_URL=https://YOUR_PROJECT.supabase.co
 SUPABASE_SERVICE_KEY=your_supabase_service_key
+GEMINI_API_KEY=your_gemini_api_key
 EOF
 
 # 3. Setup frontend environment
@@ -431,7 +433,7 @@ curl http://YOUR_EC2_IP/api/health
 
 ### 4. Browser Test
 
-```
+```text
 http://YOUR_EC2_IP
 ```
 

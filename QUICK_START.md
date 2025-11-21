@@ -129,5 +129,3 @@ A: Yes, admins can change any status. Members can only move forward.
 
 **Q: What if I don't see my category?**
 A: Categories are auto-populated from fetched bids. Fetch bids first.
-
-## 🎉 Enjoy the New Features

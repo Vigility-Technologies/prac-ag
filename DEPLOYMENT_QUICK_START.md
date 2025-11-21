@@ -3,6 +3,7 @@
 ## Choose Your Deployment Method
 
 ### 🚀 Option 1: AWS EC2 (Recommended for beginners)
+
 **Time**: 30-45 minutes  
 **Cost**: ~$10-20/month  
 **Best for**: Full control, moderate traffic
@@ -15,25 +16,28 @@ nano deploy-ec2.sh
 # 2. Make sure you have your environment variables
 cp .env.example .env
 nano .env
-# Fill in: JWT_SECRET, SUPABASE_URL, SUPABASE_SERVICE_KEY, FRONTEND_URL
+# Fill in: JWT_SECRET, SUPABASE_URL, SUPABASE_SERVICE_KEY, FRONTEND_URL, GEMINI_API_KEY
 
 # 3. Run deployment
 ./deploy-ec2.sh
 ```
 
 **What it does:**
+
 - Installs Node.js, PM2, Nginx on EC2
 - Clones and builds your application
 - Starts services with PM2
 - Configures Nginx as reverse proxy
 
 **After deployment:**
+
 - Access frontend: `http://your-ec2-ip`
 - Access backend: `http://your-ec2-ip/api`
 
 ---
 
 ### 🐳 Option 2: Docker (Easiest local/VPS deployment)
+
 **Time**: 10-15 minutes  
 **Cost**: Depends on hosting  
 **Best for**: Any server with Docker
@@ -55,11 +59,13 @@ nano .env
 ```
 
 **What it does:**
+
 - Builds Docker images for frontend & backend
 - Starts all services with docker-compose
 - Configures Nginx for routing
 
 **Manage containers:**
+
 ```bash
 # View logs
 docker-compose logs -f
@@ -74,12 +80,15 @@ docker-compose restart
 ---
 
 ### ☁️ Option 3: AWS Amplify + EC2
+
 **Time**: 45-60 minutes  
 **Cost**: ~$15-35/month  
 **Best for**: Production with auto-scaling frontend
 
 #### Part A: Backend on EC2
+
 Follow Option 1, but only for backend:
+
 ```bash
 # Deploy only backend
 ./deploy-ec2.sh
@@ -87,6 +96,7 @@ Follow Option 1, but only for backend:
 ```
 
 #### Part B: Frontend on Amplify
+
 1. Go to [AWS Amplify Console](https://console.aws.amazon.com/amplify)
 2. Click "New App" → "Host web app"
 3. Connect to GitHub repository
@@ -102,6 +112,7 @@ Follow Option 1, but only for backend:
 ---
 
 ### 🏢 Option 4: AWS ECS/Fargate (Advanced)
+
 **Time**: 1-2 hours  
 **Cost**: ~$30-50/month  
 **Best for**: High availability, auto-scaling
@@ -127,17 +138,20 @@ nano .env
 ## Pre-Deployment Checklist
 
 ### ✅ Required
+
 - [ ] AWS account (for AWS deployments)
 - [ ] Supabase project created
 - [ ] Supabase credentials ready
 - [ ] JWT secret generated (32+ characters)
 
 ### ✅ Recommended
+
 - [ ] Domain name purchased
 - [ ] SSL certificate (Let's Encrypt is free)
 - [ ] GitHub repository access
 
 ### ✅ Optional
+
 - [ ] CloudFlare for CDN/DDoS protection
 - [ ] AWS CloudWatch for monitoring
 - [ ] Backup strategy
@@ -147,26 +161,31 @@ nano .env
 ## Quick Commands
 
 ### Generate JWT Secret
+
 ```bash
 openssl rand -base64 32
 ```
 
 ### Check if services are running (EC2)
+
 ```bash
 ssh -i your-key.pem ubuntu@your-ec2-ip "pm2 status"
 ```
 
 ### View logs (EC2)
+
 ```bash
 ssh -i your-key.pem ubuntu@your-ec2-ip "pm2 logs gem-bot-backend --lines 100"
 ```
 
 ### Restart services (EC2)
+
 ```bash
 ssh -i your-ec2-ip "pm2 restart all"
 ```
 
 ### Update application (EC2)
+
 ```bash
 ssh -i your-key.pem ubuntu@your-ec2-ip << 'EOF'
 cd ~/gem-agent
@@ -193,6 +212,7 @@ JWT_EXPIRES_IN=7d
 FRONTEND_URL=https://yourdomain.com
 SUPABASE_URL=https://xxxxx.supabase.co
 SUPABASE_SERVICE_KEY=your-service-key
+GEMINI_API_KEY=your-gemini-api-key
 
 # Frontend (.env.production)
 NEXT_PUBLIC_API_URL=https://api.yourdomain.com
@@ -203,21 +223,25 @@ NEXT_PUBLIC_API_URL=https://api.yourdomain.com
 ## Cost Breakdown
 
 ### EC2 t3.micro (Option 1 & 3)
+
 - Instance: $7-10/month
 - Data transfer: $3-5/month
 - Storage: $1-2/month
 - **Total: $11-17/month**
 
 ### Amplify (Option 3 frontend)
+
 - Build time: $0.01/min
 - Hosting: $0.15/GB served
 - **Estimate: $5-15/month** (depends on traffic)
 
 ### Docker on VPS (Option 2)
+
 - Depends on provider (DigitalOcean, Linode, etc.)
 - **Estimate: $10-20/month**
 
 ### ECS Fargate (Option 4)
+
 - vCPU: $0.04048/hour
 - Memory: $0.004445/GB-hour
 - **Estimate: $30-50/month**
@@ -227,6 +251,7 @@ NEXT_PUBLIC_API_URL=https://api.yourdomain.com
 ## Troubleshooting
 
 ### Backend not accessible
+
 ```bash
 # Check if service is running
 pm2 status
@@ -239,6 +264,7 @@ pm2 restart gem-bot-backend
 ```
 
 ### Frontend not loading
+
 ```bash
 # Check Next.js process
 pm2 status
@@ -251,11 +277,13 @@ pm2 restart gem-bot-frontend
 ```
 
 ### Database connection issues
+
 - Verify Supabase credentials
 - Check if IP is whitelisted in Supabase
 - Test connection: `curl https://your-project.supabase.co`
 
 ### CORS errors
+
 - Update `FRONTEND_URL` in backend `.env`
 - Restart backend: `pm2 restart gem-bot-backend`
 
