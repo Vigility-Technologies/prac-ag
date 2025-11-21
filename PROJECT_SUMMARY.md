@@ -1,4 +1,4 @@
-# 🎉 Project Conversion Complete!
+# 🎉 Project Conversion Complete
 
 ## What Was Done
 
@@ -6,7 +6,7 @@ Your Next.js application has been successfully converted into a **monolithic Exp
 
 ## 📊 Architecture Overview
 
-### Before:
+### Before
 
 - ❌ Single Next.js app with API routes
 - ❌ No database
@@ -14,7 +14,7 @@ Your Next.js application has been successfully converted into a **monolithic Exp
 - ❌ No user management
 - ❌ No bid tracking
 
-### After:
+### After
 
 - ✅ Separate Express backend (TypeScript)
 - ✅ Supabase PostgreSQL database
@@ -62,9 +62,9 @@ Your Next.js application has been successfully converted into a **monolithic Exp
 
 ## 📁 New File Structure
 
-```
+```text
 project/
-├── server/                          # NEW: Express Backend
+├── server/                         # Express Backend
 │   ├── src/
 │   │   ├── config/
 │   │   │   └── supabase.ts         # Supabase client config
@@ -84,7 +84,7 @@ project/
 │   ├── tsconfig.json
 │   └── .env.example
 │
-├── app/                             # UPDATED: Next.js Frontend
+├── app/                            # Next.js Frontend
 │   ├── admin/
 │   │   ├── page.tsx                # Admin dashboard
 │   │   └── admin.module.css
@@ -99,13 +99,13 @@ project/
 │   ├── page.tsx                    # Home/Router
 │   └── layout.tsx                  # Root layout with AuthProvider
 │
-├── contexts/                        # NEW: React Contexts
+├── contexts/
 │   └── AuthContext.tsx             # Authentication state
 │
-├── lib/                            # NEW: Utilities
+├── lib/                            # Utilities
 │   └── api.ts                      # API client (Axios)
 │
-├── README.md                        # Updated documentation
+├── README.md                       # Updated documentation
 ├── SETUP_GUIDE.md                  # Step-by-step setup
 ├── start-dev.sh                    # Quick start script
 └── .env.local.example              # Frontend env template
@@ -115,7 +115,7 @@ project/
 
 Two main tables in Supabase:
 
-### `users` table:
+### `users` table
 
 - `id` (UUID)
 - `email` (unique)
@@ -124,7 +124,7 @@ Two main tables in Supabase:
 - `role` (admin | member)
 - Timestamps
 
-### `bids` table:
+### `bids` table
 
 - `id` (UUID)
 - `bid_number`, `gem_bid_id` (unique)
@@ -179,7 +179,7 @@ npm run dev
 3. **Configure Environment**: Set up .env files with your credentials
 4. **Install Dependencies**: Run `npm install` in both server and root
 5. **Start Servers**: Use `./start-dev.sh` or start manually
-6. **Register First Admin**: Go to http://localhost:3000 and create admin account
+6. **Register First Admin**: Go to <http://localhost:3000> and create admin account
 7. **Get CSRF Token**: From GEM portal (see SETUP_GUIDE.md Step 9)
 8. **Fetch Bids**: Use admin dashboard to import bids
 
@@ -193,7 +193,7 @@ npm run dev
 
 ### Bid Status Workflow
 
-```
+```text
 [Available] ──→ [Considered] ──→ [In Progress] ──→ [Submitted]
      ↓
 [Rejected] (hidden forever)
@@ -235,14 +235,10 @@ Check these files:
 
 You'll know it's working when:
 
-- ✅ Backend runs on http://localhost:5000
-- ✅ Frontend runs on http://localhost:3000
+- ✅ Backend runs on <http://localhost:5000>
+- ✅ Frontend runs on <http://localhost:3000>
 - ✅ You can register/login
 - ✅ Admin can fetch and see bids
 - ✅ Admin can assign bids to members
 - ✅ Members can see their assigned bids
 - ✅ Rejected bids don't appear again
-
----
-
-**Happy Coding! 🚀**

@@ -2,7 +2,7 @@
 
 ## 🎯 What's New?
 
-### For Admins:
+### For Admins
 
 1. **Search Bar** - Find bids instantly
 2. **Category Filter** - Filter by bid categories
@@ -10,7 +10,7 @@
 4. **Table/Card View Toggle** - Switch between layouts (📊/📇 buttons)
 5. **Bid Details Modal** - Click 👁️ to see full details and take actions
 
-### For Members:
+### For Members
 
 1. **Search & Filter** - Find your assigned bids quickly
 2. **Table/Card View** - Choose your preferred layout
@@ -19,27 +19,27 @@
 
 ## 🚀 Quick Actions
 
-### Admin - Assign a Bid:
+### Admin - Assign a Bid
 
-```
+```text
 1. Click 👁️ on any available bid
 2. Select member from dropdown
 3. Set due date (optional)
 4. Click "Assign Bid"
 ```
 
-### Admin - Change Status:
+### Admin - Change Status
 
-```
+```text
 1. Click 👁️ on any bid
 2. Click "Change Status"
 3. Select new status
 4. Confirm
 ```
 
-### Member - Submit Work:
+### Member - Submit Work
 
-```
+```text
 1. Click 👁️ on your bid
 2. Click "Change Status"
 3. Add document link
@@ -86,14 +86,14 @@ You can combine multiple filters:
 
 ## 🛠️ For Developers
 
-### Run Member Seed Script:
+### Run Member Seed Script
 
 ```bash
 cd server
 npm run seed:members
 ```
 
-### API Examples:
+### API Examples
 
 **Get Categories:**
 
@@ -130,4 +130,4 @@ A: Yes, admins can change any status. Members can only move forward.
 **Q: What if I don't see my category?**
 A: Categories are auto-populated from fetched bids. Fetch bids first.
 
-## 🎉 Enjoy the New Features!
+## 🎉 Enjoy the New Features
