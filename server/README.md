@@ -4,21 +4,21 @@ Backend server for GEM Bid Management System.
 
 ## Setup
 
-1. Install dependencies:
+### Install dependencies
 
 ```bash
 npm install
 ```
 
-2. Copy `.env.example` to `.env` and fill in your credentials
+### Copy `.env.example` to `.env` and fill in your credentials
 
-3. Run the development server:
+### Run the development server
 
 ```bash
 npm run dev
 ```
 
-4. Build for production:
+### Build for production
 
 ```bash
 npm run build
